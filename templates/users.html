@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+    <style>
+        table tr {
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <h1>User List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>ID Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr style="
+                    {% if user.id % 2 == 1 %}  {# 如果ID是奇数 #}
+                        background-color: green;
+                    {% elif user.id % 10 == 0 %}  {# ID能被10整除 #}
+                        background-color: pink;
+                    {% else %}  {# ID是偶数但不能被10整除 #}
+                        background-color: red;
+                    {% endif %}
+                ">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.id_no }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
