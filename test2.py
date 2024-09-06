@@ -8,8 +8,9 @@ async def startup_event():
     await reg_tortoise(app)
 
     from schedule import scheduler, io_scheduler, tick, add_user
-    io_scheduler.add_job(tick, 'interval', seconds=3)
-    io_scheduler.add_job(add_user, 'interval', seconds=10)
+    # io_scheduler.add_job(tick, 'interval', seconds=3)
+    io_scheduler.add_job(add_user, 'interval', seconds=2)
+    io_scheduler.add_job(add_user, 'interval', seconds=1)
     io_scheduler.start()
 
 
@@ -36,10 +37,14 @@ from fastapi.templating import Jinja2Templates
 templates = Jinja2Templates(directory="templates")  # 指定模板目录
 @app.get('/showall', response_class=HTMLResponse)
 async def showall():
-    from sql import User
-    users = await User.all()
-    return templates.TemplateResponse("users.html", {"request": {}, "users": users})
+    from sql import db_bridge
+    async def get_all():
+        from sql import User
+        users = await User.all()
+        return users
+
+    return templates.TemplateResponse("users.html", {"request": {}, "users": db_bridge.create_task(get_all(), is_return=True)})
 
 
 if __name__ == '__main__':
-    uvicorn.run(app=app)
+    uvicorn.run(app=app, port=9898)

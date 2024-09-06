@@ -1,5 +1,6 @@
 from .mysql import *
 from .models import *
+from .db_bridge import *
 
 # 初始化
 from tortoise import Tortoise
@@ -11,3 +12,5 @@ async def reg_tortoise(app):
     )
     # Generate the schema
     # await Tortoise.generate_schemas()
+
+db_bridge = DBBridge()
